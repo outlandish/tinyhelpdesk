@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Requests</h6>
+            {{ include('request/requests_list.html.twig', { requests: requests }, with_context = false) }}
+        </div>
+    </div>
+{% endblock %}

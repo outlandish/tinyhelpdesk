@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Requests</h6>
+
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form_label(form.assignee) }}
+                        {{ form_widget(form.assignee) }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form_label(form.creator) }}
+                        {{ form_widget(form.creator) }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form_widget(form.page) }}
+                    </div>
+
+                    <div class="col-md-3 mb-3 filter-button-container">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Filter Results</button>
+                    </div>
+                </div>
+                <hr class="mb-4">
+            {{ form_end(form) }}
+
+            {{ include('request/requests_list.html.twig', { requests: requests }, with_context = false) }}
+        </div>
+    </div>
+{% endblock %}
