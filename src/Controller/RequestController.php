@@ -54,14 +54,17 @@ class RequestController extends AbstractController
     public function allRequests(HttpRequest $request, RequestSearchProcessor $requestSearchProcessor): Response
     {
         $form = $this->createForm(RequestSearchType::class)->handleRequest($request);
-        $searchDataClass = $form->getData();
 
+        /**
+         * @var $searchDataClass RequestSearchDataClass
+         */
+        $searchDataClass = $form->getData();
         $searchResult = $requestSearchProcessor->getResult($searchDataClass);
 
         return $this->render(
             'request/requests.html.twig',
             [
-                'requests' => $searchResult['result'],
+                'requestsPagination' => array_merge($searchResult, ['page' => $searchDataClass->getPage()]),
                 'form' => $form->createView(),
             ]
         );

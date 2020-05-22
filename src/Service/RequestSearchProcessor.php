@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Request;
 use App\Form\DataClass\RequestSearchDataClass;
+use App\Helper\PaginationHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -16,10 +17,15 @@ class RequestSearchProcessor
      * @var EntityManagerInterface
      */
     private $manager;
+    /**
+     * @var PaginationHelper
+     */
+    private $paginationHelper;
 
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(EntityManagerInterface $manager, PaginationHelper $paginationHelper)
     {
         $this->manager = $manager;
+        $this->paginationHelper = $paginationHelper;
     }
 
     /**
@@ -28,19 +34,27 @@ class RequestSearchProcessor
      */
     public function getResult(RequestSearchDataClass $dataClass): array
     {
-        $qb = $this->getQueryBuilder();
+        $totalCount = $this->getTotalCount($dataClass);
+        $page = $dataClass->getPage();
 
+        $qb = $this->getQueryBuilder();
         $this->addWhere($qb, $dataClass);
         $this->addOrderBy($qb, $dataClass->getSortBy());
 
-        $query = $this->addPagination($qb->getQuery(), $dataClass->getPage());
+        $query = $qb->getQuery();
+        $this->addPagination($query, $page);
 
         return [
             'result' => $query->getResult(),
-            'totalCount' => $this->getTotalCount($dataClass),
+            'totalCount' => $totalCount,
+            'hasNextPage' => $this->paginationHelper->hasNextPage($page, $totalCount, self::LIMIT_PER_PAGE),
+            'hasPreviousPage' => $this->paginationHelper->hasPreviousPage($page, $totalCount, self::LIMIT_PER_PAGE),
         ];
     }
 
+    /**
+     * @return QueryBuilder
+     */
     private function getQueryBuilder(): QueryBuilder
     {
         return $this->manager
@@ -50,6 +64,8 @@ class RequestSearchProcessor
     }
 
     /**
+     * @param RequestSearchDataClass $dataClass
+     *
      * @return int
      */
     private function getTotalCount(RequestSearchDataClass $dataClass): int
@@ -68,7 +84,7 @@ class RequestSearchProcessor
      *
      * @return QueryBuilder
      */
-    private function addWhere(QueryBuilder $qb, RequestSearchDataClass $dataClass): QueryBuilder
+    private function addWhere(QueryBuilder $qb, RequestSearchDataClass $dataClass)
     {
         if ($dataClass->getAssignee()) {
             $qb->andWhere('request.assignee = :assignee')
@@ -105,7 +121,7 @@ class RequestSearchProcessor
     private function addPagination(Query $query, int $currentPage): Query
     {
         if ($currentPage > 1) {
-            $query->setFirstResult($currentPage * self::LIMIT_PER_PAGE);
+            $query->setFirstResult(($currentPage - 1) * self::LIMIT_PER_PAGE);
         }
 
         $query->setMaxResults(self::LIMIT_PER_PAGE);

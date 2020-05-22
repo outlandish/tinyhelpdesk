@@ -1,32 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <div class="container">
-        <div class="my-3 p-3 bg-white rounded shadow-sm">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Requests</h6>
+{% block container %}
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Requests</h6>
 
-            {{ form_start(form) }}
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        {{ form_label(form.assignee) }}
-                        {{ form_widget(form.assignee) }}
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form_label(form.creator) }}
-                        {{ form_widget(form.creator) }}
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form_widget(form.page) }}
-                    </div>
-
-                    <div class="col-md-3 mb-3 filter-button-container">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Filter Results</button>
-                    </div>
+        {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    {{ form_label(form.assignee) }}
+                    {{ form_widget(form.assignee) }}
                 </div>
-                <hr class="mb-4">
-            {{ form_end(form) }}
+                <div class="col-md-3 mb-3">
+                    {{ form_label(form.creator) }}
+                    {{ form_widget(form.creator) }}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form_widget(form.page) }}
+                </div>
 
-            {{ include('request/requests_list.html.twig', { requests: requests }, with_context = false) }}
+                <div class="col-md-3 mb-3 filter-button-container">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Filter Results</button>
+                </div>
+            </div>
+            <hr class="mb-4">
+        {{ form_end(form) }}
+
+        {{ include('request/requests_list.html.twig', { requests: requestsPagination.result }, with_context = false) }}
+
+        <div class="pagination">
+            {% if requestsPagination.hasPreviousPage %}
+                <a class="previous-page-button" href="#">
+                    <img src="{{ asset('build/images/bootstrap-icons/arrow-left.svg') }}" alt="" width="42" height="42" title="Previous Page">
+                </a>
+            {% endif %}
+
+            {% if requestsPagination.hasNextPage %}
+                <a class="next-page-button" href="#">
+                    <img src="{{ asset('build/images/bootstrap-icons/arrow-right.svg') }}" alt="" width="42" height="42" title="Next Page">
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

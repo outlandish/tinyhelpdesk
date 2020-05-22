@@ -11,7 +11,7 @@
 
 {% block navigation %}{% endblock %}
 
-{% block body %}
+{% block container %}
     <form method="post" class="form-signin">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
