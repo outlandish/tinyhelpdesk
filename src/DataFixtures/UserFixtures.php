@@ -6,12 +6,13 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Faker\Factory as FakerFactory;
 
 class UserFixtures extends Fixture
 {
     public const USER_REFERENCE = 'user-reference';
 
-    private $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -20,12 +21,13 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $user = new User();
+        $faker = FakerFactory::create();
 
-        $user->setFirstName('Massimo');
-        $user->setLastName('User');
-        $user->setEmail('rizzoni@tinyhelpdesk.com');
-        $user->setUsername('rizzoni@tinyhelpdesk.com');
+        $user = new User();
+        $user->setFirstName($faker->firstName);
+        $user->setLastName($faker->lastName);
+        $user->setEmail($faker->email);
+        $user->setUsername($user->getEmail());
         $user->setRoles([User::ROLE_USER]);
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'user_pass'));
 
@@ -34,22 +36,20 @@ class UserFixtures extends Fixture
         $manager->persist($user);
 
         $adminUser = new User();
-
-        $adminUser->setFirstName('John');
-        $adminUser->setLastName('Admin');
-        $adminUser->setEmail('johnadmin@tinyhelpdesk.com');
-        $adminUser->setUsername('johnadmin@tinyhelpdesk.com');
+        $adminUser->setFirstName($faker->firstName);
+        $adminUser->setLastName($faker->lastName);
+        $adminUser->setEmail($faker->email);
+        $adminUser->setUsername($adminUser->getEmail());
         $adminUser->setRoles([User::ROLE_ADMIN]);
         $adminUser->setPassword($this->passwordEncoder->encodePassword($user, 'admin_pass'));
 
         $manager->persist($adminUser);
 
         $supportUser = new User();
-
-        $supportUser->setFirstName('Bob');
-        $supportUser->setLastName('Support');
-        $supportUser->setEmail('bobsupport@tinyhelpdesk.com');
-        $supportUser->setUsername('bobsupport@tinyhelpdesk.com');
+        $supportUser->setFirstName($faker->firstName);
+        $supportUser->setLastName($faker->lastName);
+        $supportUser->setEmail($faker->email);
+        $supportUser->setUsername($supportUser->getEmail());
         $supportUser->setRoles([User::ROLE_SUPPORT]);
         $supportUser->setPassword($this->passwordEncoder->encodePassword($user, 'support_pass'));
 

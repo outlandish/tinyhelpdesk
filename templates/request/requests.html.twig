@@ -25,7 +25,7 @@
             <hr class="mb-4">
         {{ form_end(form) }}
 
-        {{ include('request/requests_list.html.twig', { requests: requestsPagination.result }, with_context = false) }}
+        {{ include('request/list.html.twig', { requests: requestsPagination.result }, with_context = false) }}
 
         <div class="pagination">
             {% if requestsPagination.hasPreviousPage %}

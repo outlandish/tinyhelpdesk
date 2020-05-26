@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('request') }}
+{% endblock %}
+
+{% block container %}
+    <div class="row request-form-container">
+        <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Request</h4>
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title) }}
+
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.title) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.text) }}
+                        {{ form_widget(form.text) }}
+
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.text) }}
+                        </div>
+                    </div>
+                </div>
+            <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form_label(form.priority) }}
+                        {{ form_widget(form.priority) }}
+
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.priority) }}
+                        </div>
+                    </div>
+                </div>
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block request-submit-button" type="submit">Submit the request creation</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

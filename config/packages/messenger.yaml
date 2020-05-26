@@ -1,0 +1,26 @@
+framework:
+    messenger:
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+
+        transports:
+            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            async:
+                dsn: '%env(RABBITMQ_DSN)%'
+                options:
+                    exchange:
+                        name: request_email_ex
+                        type: direct
+                    queues:
+                        request_email_1:
+                            binding_keys:
+                                - first
+                        request_email_2:
+                            binding_keys:
+                                - second
+            # failed: 'doctrine://default?queue_name=failed'
+            # sync: 'sync://'
+
+        routing:
+            # Route your messages to the transports
+            App\Message\RequestMessage: async

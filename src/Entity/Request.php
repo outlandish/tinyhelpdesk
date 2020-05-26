@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RequestRepository")
@@ -16,44 +18,50 @@ class Request
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private ?string $title = null;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $text;
+    private ?string $text = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $creator;
+    private User $creator;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RequestPriority")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?RequestPriority $priority = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $assignee;
+    private User $assignee;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private \DateTime $createdAt;
 
     /**
-     * @ORM\Column(columnDefinition="DATETIME on update CURRENT_TIMESTAMP")
+     * @ORM\Column(type="datetime", columnDefinition="DATETIME on update CURRENT_TIMESTAMP")
      */
-    private $updatedAt;
+    private \DateTime $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="request", orphanRemoval=true)
      */
-    private $comments;
+    private Selectable $comments;
 
     public function __construct()
     {
@@ -151,5 +159,29 @@ class Request
     public function setAssignee(User $assignee): void
     {
         $this->assignee = $assignee;
+    }
+
+    /**
+     * @return RequestPriority
+     */
+    public function getPriority(): ?RequestPriority
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param RequestPriority $priority
+     */
+    public function setPriority(RequestPriority $priority): void
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 }

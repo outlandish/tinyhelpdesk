@@ -6,16 +6,20 @@ use App\Entity\Request;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory as FakerFactory;
 
 class RequestFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        $faker = FakerFactory::create();
+
         for ($i = 1; $i < 20; $i++) {
             $request = new Request();
-            $request->setTitle('Request #' . $i);
-            $request->setText('Hello! I have an issue with my PC');
+            $request->setTitle($faker->sentence($nbWords = 6, $variableNbWords = true));
+            $request->setText($faker->text($maxNbChars = 200) );
             $request->setCreator($this->getReference(UserFixtures::USER_REFERENCE));
+            $request->setPriority($this->getReference(RequestPriorityFixtures::LOW_PRIORITY));
 
             $manager->persist($request);
         }
@@ -23,11 +27,14 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    /**
+     * @return string[]
+     */
+    public function getDependencies(): array
     {
-        return array(
+        return [
             UserFixtures::class,
-        );
+            RequestPriorityFixtures::class,
+        ];
     }
-
 }
