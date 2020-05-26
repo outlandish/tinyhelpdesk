@@ -1,0 +1,60 @@
+version: '3.7'
+services:
+    db:
+        container_name: db
+        image: mysql
+        command: ["--default-authentication-plugin=mysql_native_password"]
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: symfony
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: symfony
+        networks:
+            - db
+    php:
+        container_name: php-fpm
+        build: docker/php-fpm
+        volumes:
+            - ./:/var/www/tinyhelpdesk:cached
+            - ./docker/logs/symfony:/var/www/tinyhelpdesk/var/log:cached
+            - ./docker/
+        depends_on: 
+            - db
+        networks:
+            - db
+            - php
+    nginx:
+        container_name: nginx
+        build: docker/nginx
+        ports:
+            - "80:80"
+        depends_on: 
+            - php
+        networks:
+            - php
+        volumes:
+            - ./docker/logs/nginx:/var/log/nginx:cached
+            - ./:/var/www/tinyhelpdesk:cached
+            - ./docker/
+    rabbitmq:
+        image: rabbitmq:3.7.5-management
+        container_name: rabbitmq
+        hostname: rabbitmq
+        user: rabbitmq
+        ports:
+            - 5672:5672
+            - 15672:15672
+        environment:
+            RABBITMQ_ERLANG_COOKIE: 6085e2412b6fa88647466c6a81c0cea0
+            RABBITMQ_DEFAULT_USER: rabbitmq
+            RABBITMQ_DEFAULT_PASS: rabbitmq
+            RABBITMQ_DEFAULT_VHOST: /
+        depends_on: 
+            - php
+        networks:
+            - php
+networks:
+    db:
+    php:
