@@ -55,6 +55,15 @@ services:
             - php
         networks:
             - php
+    mailcatcher:
+        image: schickling/mailcatcher
+        container_name: mailcatcher
+        ports:
+            - 1080:1080
+        depends_on:
+            - php
+        networks:
+            - php
 networks:
     db:
     php:

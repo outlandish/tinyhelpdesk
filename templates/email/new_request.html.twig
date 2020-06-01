@@ -1,0 +1,11 @@
+{% extends 'email/base.html.twig' %}
+
+{% block body %}
+    <p>A new request was created. See the details:</p>
+    <ul>
+        <li>Title: {{ request.title }}</li>
+        <li>Text: {{ request.text }}</li>
+    </ul>
+
+    The request will be assigned to the first available engineer ASAP.
+{% endblock %}

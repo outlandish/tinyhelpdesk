@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\RequestRepository")
  */
 class Request
@@ -46,7 +47,7 @@ class Request
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=true)
      */
-    private User $assignee;
+    private ?User $assignee = null;
 
     /**
      * @ORM\Column(type="datetime")

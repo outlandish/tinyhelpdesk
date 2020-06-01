@@ -15,17 +15,17 @@ class RequestFormHandler
     /**
      * @var Security
      */
-    private $security;
+    private Security $security;
 
     /**
      * @var EntityManagerInterface
      */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     /**
      * @var MessageBusInterface
      */
-    private $bus;
+    private MessageBusInterface $bus;
 
     public function __construct(Security $security, EntityManagerInterface $manager, MessageBusInterface $bus)
     {

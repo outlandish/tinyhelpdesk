@@ -16,11 +16,11 @@ class RequestSearchProcessor
     /**
      * @var EntityManagerInterface
      */
-    private $manager;
+    private EntityManagerInterface $manager;
     /**
      * @var PaginationHelper
      */
-    private $paginationHelper;
+    private PaginationHelper $paginationHelper;
 
     public function __construct(EntityManagerInterface $manager, PaginationHelper $paginationHelper)
     {
