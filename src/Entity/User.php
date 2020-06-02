@@ -14,8 +14,10 @@ class User implements UserInterface
 {
     public const ROLE_ADMIN = 'ROLE_ADMIN';
     public const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
+    public const ROLE_AUTHENTICATED_FULLY = 'IS_AUTHENTICATED_FULLY';
     public const ROLE_USER = 'ROLE_USER';
     public const ROLE_SUPPORT = 'ROLE_SUPPORT';
+    public const ROLE_API = 'ROLE_API';
 
     /**
      * @ORM\Id()

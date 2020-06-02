@@ -21,40 +21,41 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+        $this->createUser($manager, 'user_pass', [User::ROLE_USER], self::USER_REFERENCE);
+        $this->createUser($manager, 'admin_pass', [User::ROLE_ADMIN]);
+        $this->createUser($manager, 'support_pass', [User::ROLE_SUPPORT]);
+        $this->createUser($manager, 'api_pass', [User::ROLE_API]);
+
+        $manager->flush();
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @param string $password
+     * @param array $roles
+     * @param string|null $reference
+     */
+    private function createUser(
+        ObjectManager $manager,
+        string $password,
+        array $roles,
+        ?string $reference = null
+    ): void {
         $faker = FakerFactory::create();
 
         $user = new User();
+
         $user->setFirstName($faker->firstName);
         $user->setLastName($faker->lastName);
         $user->setEmail($faker->email);
         $user->setUsername($user->getEmail());
-        $user->setRoles([User::ROLE_USER]);
-        $user->setPassword($this->passwordEncoder->encodePassword($user, 'user_pass'));
+        $user->setRoles($roles);
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
 
-        $this->addReference(self::USER_REFERENCE, $user);
+        if ($reference !== null) {
+            $this->addReference($reference, $user);
+        }
 
         $manager->persist($user);
-
-        $adminUser = new User();
-        $adminUser->setFirstName($faker->firstName);
-        $adminUser->setLastName($faker->lastName);
-        $adminUser->setEmail($faker->email);
-        $adminUser->setUsername($adminUser->getEmail());
-        $adminUser->setRoles([User::ROLE_ADMIN]);
-        $adminUser->setPassword($this->passwordEncoder->encodePassword($user, 'admin_pass'));
-
-        $manager->persist($adminUser);
-
-        $supportUser = new User();
-        $supportUser->setFirstName($faker->firstName);
-        $supportUser->setLastName($faker->lastName);
-        $supportUser->setEmail($faker->email);
-        $supportUser->setUsername($supportUser->getEmail());
-        $supportUser->setRoles([User::ROLE_SUPPORT]);
-        $supportUser->setPassword($this->passwordEncoder->encodePassword($user, 'support_pass'));
-
-        $manager->persist($supportUser);
-
-        $manager->flush();
     }
 }

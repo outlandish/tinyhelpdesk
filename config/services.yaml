@@ -30,3 +30,8 @@ services:
         arguments:
             $mailer: '@mailer'
             $supportEmail: '%support_email%'
+
+    App\Swagger\SwaggerDecorator:
+        decorates: 'api_platform.swagger.normalizer.documentation'
+        arguments: ['@App\Swagger\SwaggerDecorator.inner']
+        autoconfigure: false
