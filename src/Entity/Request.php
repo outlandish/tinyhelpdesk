@@ -57,7 +57,7 @@ class Request
     /**
      * @ORM\Column(type="datetime", columnDefinition="DATETIME on update CURRENT_TIMESTAMP")
      */
-    private \DateTime $updatedAt;
+    private ?\DateTime $updatedAt = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="request", orphanRemoval=true)
@@ -184,5 +184,13 @@ class Request
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
     }
 }

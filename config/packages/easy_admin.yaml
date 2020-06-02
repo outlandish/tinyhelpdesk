@@ -1,4 +1,8 @@
 easy_admin:
     entities:
-        # List the entity class name you want to manage
-        - App\Entity\Request
+        Request:
+            class: App\Entity\Request
+            form:
+                fields:
+                    - title
+                    - text
