@@ -67,4 +67,12 @@ class RequestPriority
     {
         $this->handle = $handle;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
 }

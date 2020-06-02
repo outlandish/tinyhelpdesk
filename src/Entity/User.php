@@ -222,4 +222,12 @@ class User implements UserInterface
     {
         return $this->getFirstName() . ' ' . $this->getLastName();
     }
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->getFullName();
+    }
 }
