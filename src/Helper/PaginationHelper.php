@@ -18,12 +18,10 @@ class PaginationHelper
 
     /**
      * @param int $currentPage
-     * @param int $totalCount
-     * @param int $perPage
      *
      * @return bool
      */
-    public function hasPreviousPage(int $currentPage, int $totalCount, int $perPage): bool
+    public function hasPreviousPage(int $currentPage): bool
     {
         return $currentPage > 1;
     }
