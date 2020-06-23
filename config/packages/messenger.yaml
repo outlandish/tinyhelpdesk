@@ -9,7 +9,7 @@ framework:
                 dsn: '%env(RABBITMQ_DSN)%'
                 options:
                     exchange:
-                        name: request_email_ex
+                        name: thd_ex
                         type: direct
                     queues:
                         request_email_1:
