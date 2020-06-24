@@ -22,9 +22,11 @@ services:
             - ./docker/
         depends_on: 
             - db
+            - elasticsearch
         networks:
             - db
             - php
+            - elasticsearch
     nginx:
         container_name: nginx
         build: docker/nginx
@@ -64,6 +66,23 @@ services:
             - php
         networks:
             - php
+    elasticsearch:
+        container_name: elasticsearch
+        image: elasticsearch:7.8.0
+        environment:
+            discovery.type: "single-node"
+        ports:
+            - 9200:9200
+        networks:
+            - elasticsearch
+    elastic_hq:
+        container_name: elastic_hq
+        image: elastichq/elasticsearch-hq
+        ports:
+            - 5000:5000
+        networks:
+            - elasticsearch
 networks:
     db:
     php:
+    elasticsearch:
