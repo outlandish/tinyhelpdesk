@@ -53,10 +53,6 @@ class RequestMessageHandler implements MessageHandlerInterface
             return;
         }
 
-        $request->setText('Rabbit!');
-
-        $this->entityManager->flush();
-
         $this->emailSender->sendRequestEmail($request);
     }
 }
